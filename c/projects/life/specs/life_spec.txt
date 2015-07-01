@@ -1,0 +1,33 @@
+Grid Representation:
+  The grid is represented as a 64 bit integer
+  viewed as an 8 by 8 bit array, using row-major
+  order.
+
+  Arbitrary grids can be formed by using the following
+  pattern:
+
+    +-----------+-----------+-----------+
+    |   additional uint64_t     <---    |
+    +           +-----------+-----------+
+    |   |       |uint64_t[2]|uint64_t[1]|
+    +   v       +-----------+-----------+
+    |           |uint64_t[3]|uint64_t[0]|
+    +-----------+-----------+-----------+
+
+  Although that might be unnecessary.
+
+The structure of the program is as follows:
+
+
+
+
+
+  It's broken up into various functional components,
+
+
+  uint64_t *GenerateGrid(uint64_t): Takes in a valid grid
+  and returns an array of grids that are also valid. A valid
+  grid is a grid that contains at least one live cell 1) in its
+  top row and 2)  it's left row. Note that a single live cell
+  at the top left corner satisfies both requirements.
+

@@ -1,0 +1,9 @@
+push_front_test
+push_front 1 push_front 2 push_front 3
+[3,2,1](3)
+
+pop_front_test
+(push_test) pop_front 3 pop_front 2 pop_front 1
+[](0)
+
+

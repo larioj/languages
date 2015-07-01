@@ -1,0 +1,6 @@
+*.pdf
+*.zip
+*.o
+*.out
+*.exe
+.*.swp
