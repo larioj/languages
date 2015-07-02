@@ -13,7 +13,7 @@
 	+ Separate Chaining Other
 	+ Open Addressing Cryptographic
 4. Disjoint Set
-5. Vector
+5. Vector (check)
 6. Tree
 	+ Binary Tree
 	+ Red-Black Tree

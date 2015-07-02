@@ -91,7 +91,7 @@ bool _(insert)(_(vec) vec, T item, int index) {
 	if (index >= vec->size) {
 		return _(push_back)(vec, item);
 	}
-	if (vec->size == vec->maxsize && !_(grow)(vec)) {
+	if (0 > index || (vec->size == vec->maxsize && !_(grow)(vec))) {
 		return false;
 	}
 	for (int i = vec->size; i > index; i--) {
@@ -109,7 +109,7 @@ bool _(pop_front)(_(vec) vec, T *item) {
 
 bool _(pop_back)(_(vec) vec, T *item) {
 	if (vec->size < vec->maxsize/4 && vec->maxsize > INITIALSIZE
-			&& !_(shrink)) {
+			&& !_(shrink)(vec)) {
 		return false;
 	}
 	*item = vec->item[vec->size - 1];
@@ -119,7 +119,7 @@ bool _(pop_back)(_(vec) vec, T *item) {
 
 bool _(remove)(_(vec) vec, T *item, int index) {
 	if (vec->size < vec->maxsize/4 && vec->maxsize > INITIALSIZE
-			&& !_(shrink)) {
+			&& !_(shrink)(vec)) {
 		return false;
 	}
 	*item = vec->item[index];
@@ -174,16 +174,18 @@ bool _(grow)(_(vec) vec) {
 		return false;
 	}
 	vec->item = newitem;
+	vec->maxsize *= 2;
 	return true;
 }
 
 bool _(shrink)(_(vec) vec) {
 	T *newitem;
-	newitem = (T *) realloc(vec->item, (sizeof(T) * vec->maxsize)/2);
+	newitem = (T *) realloc(vec->item, sizeof(T) * (vec->maxsize/2));
 	if (!newitem) {
 		return false;
 	}
 	vec->item = newitem;
+	vec->maxsize /= 2;
 	return true;
 }
 
