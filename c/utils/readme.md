@@ -5,7 +5,7 @@
 	+ Move to front List
 	+ Lock free list
 2. Heap
-	+ Binary
+	+ Binary (check)
 	+ Nary
 	+ Fibonacci
 3. Hashtable
