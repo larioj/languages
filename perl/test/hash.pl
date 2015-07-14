@@ -39,3 +39,16 @@ print "scores are: @score{@players}\n";
 
 # All elements without spaces
 print %hash;
+
+# Arrays as values
+@arr1 = qw(a b c);
+@arr2 = qw(d e f);
+$val = "hello";
+%ahash = ();
+$ahash{"arr1"} = [@arr1];
+$ahash{"arr2"} = [@arr2];
+$ahash{"val"} = $val;
+
+# apparently we have to convert
+@arr3 = @{$ahash{"arr1"}};
+print "\n", @arr3, "\n";
