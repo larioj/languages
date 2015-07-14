@@ -58,16 +58,16 @@ void lol(char *str);
  * destroys str. */
 void reflect(char *str);
 
-/* increment left. Increments by one, in place, the left side
- * of str concatenated with the center character if str is of
- * odd length. For example if str is 12345, the increment will
+/* increment left center. Increments by one, in place, the left
+ * side of str concatenated with the center character if str is
+ * of odd length. For example if str is 12345, the increment will
  * modify str to be 12445. The left part + middle character
  * increased from 123 to 124. If str is 1945, then str will
  * be modified to 2045. Note that in this case there is no
  * middle character. Note that this function does not work
  * if all characters of the left + middle parts of str are
  * nines. */
-void incrementl(char *str);
+void incrementlc(char *str);
 
 int main() {
 	int loops;
@@ -82,7 +82,7 @@ int main() {
 		} else if (0 < rlrcmp(str)) {
 			reflect(str);
 		} else {
-			incrementl(str);
+			incrementlc(str);
 			reflect(str);
 		}
 	}
@@ -173,7 +173,7 @@ void reflect(char *str) {
 	printf("%c\n", *l);
 }
 
-void incrementl(char *str) {
+void incrementlc(char *str) {
 	char *r, *l;
 	getrl(str, &r, &l);
 	r--;
