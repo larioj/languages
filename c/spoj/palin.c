@@ -109,7 +109,9 @@ void lol(char *str) {
 	 * For a long time I always felt awkward when I had to
 	 * print out something different at the beginning of a
 	 * range print. I always felt that there must be a more
-	 * elegant way of doing it. This is it. */
+	 * elegant way of doing it. This is it. Also it doesn't
+	 * matter that we are assigning inside a loop, it'll get
+	 * optimized out. */
 	char c = '1';
 	for (int i = 0; i < strlen(str); i++) {
 		printf("%c", c);
@@ -191,7 +193,7 @@ void incrementl(char *str) {
 
 /* A note about design: The modularity of the program is very
  * useful. The best function in the program is getrl. It confines
- * complicated index to single part of the program and then reused
- * multiple times. It makes all the other function very simple.
+ * complicated indexing to a single part of the program and then
+ * is reused multiple times. It makes all the other function very simple.
  * Without getrl the other parts of the code would be significantly
- * more complicated. Also there are now more comments than code =]*/
+ * more complicated. Also there are now more comments than code =] */
