@@ -4,4 +4,6 @@
 *.out
 *.exe
 .*.swp
+.DS_Store
+*/DS_Store
 assembler/baremetal/libs/*
