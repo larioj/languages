@@ -1,5 +1,0 @@
-
-The source for the YAGARTO toolchain can be found here:
-
-www.yagarto.de/source
-
