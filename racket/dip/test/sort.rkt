@@ -23,13 +23,12 @@
 ;; sorts a list.
 (define (sort-rand-list my-list)
 	(cond
-		[(empty? my-list) (empty)]
+		[(empty? my-list) empty]
 		[else
-;;			(insert-into-sorted
-;;				(first my-list)
-;;				(sort-rand-list (rest my-list))
-;;			)
-			(empty)
+			(insert-into-sorted
+				(first my-list)
+				(sort-rand-list (rest my-list))
+			)
 		]
 	)
 )
