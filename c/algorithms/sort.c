@@ -6,6 +6,14 @@ struct pair {
 	int r, c;
 };
 
+struct matrix {
+	int *items;
+};
+
+void matrixAlloc();
+void matrixSet(int r, int c, int val);
+int matrixGet(int r, int c);
+
 void printRecord();
 void fillDiagonal();
 void compare(int r, int c);
@@ -18,11 +26,18 @@ void printRandom();
 void printSorted();
 void getSorted();
 
-int record[10][10] = {0};
+void setLength();
+
+int length;
+
+struct matrix record;
+
+// int record[10][10] = {0};
 int elements[] = {42, 82, 74, 75, 89, 54, 3, 4, 46, 37};
-int sorted[10];
-int rindeces[100];
-int rcount = 100;
+int *sorted;
+// int sorted[10];
+int *rindeces; //[length * length];
+int rcount; //  = length * length;
 int comparisons = 0;
 
 int main(int argc, char **argv) {
@@ -41,17 +56,18 @@ int main(int argc, char **argv) {
 }
 
 void printRecord() {
-	for (int i = 0; i < 10; i++) {
+	for (int i = 0; i < length; i++) {
 		printf("\n");
-		for (int j = 0; j < 10; j++)
-			printf("%d ", record[i][j]);
+		for (int j = 0; j < length; j++)
+			printf("%d ", matrixGet(i, j));
 	}
 	printf("\n");
 }
 
 void fillDiagonal() {
-	for (int i = 0; i < 10; i++) {
-		record[i][i] = 7;
+	for (int i = 0; i < length; i++) {
+		matrixSet(i, i, 7);
+		// record[i][i] = 7;
 		removeRandom(i, i);
 	}
 }
@@ -62,11 +78,12 @@ void compare(int r, int c) {
 }
 
 void mark(int r, int c, int val) {
-	if (record[r][c] != val) {
-		record[r][c] = val;
+	if (/*record[r][c]*/ matrixGet(r, c) != val) {
+		matrixSet(r, c, val);
+		// record[r][c] = val;
 		removeRandom(r, c);
-		for (int i = 0; i < 10; i++) {
-			if (record[i][r] == val) {
+		for (int i = 0; i < length; i++) {
+			if (/*record[i][r]*/ matrixGet(i, r)  == val) {
 				mark(i, c, val);
 			}
 		}
@@ -75,14 +92,14 @@ void mark(int r, int c, int val) {
 }
 
 void startRandom() {
-	for (int i = 0; i < 100; i++) {
+	for (int i = 0; i < length * length; i++) {
 		rindeces[i] = i;
 	}
 	time_t t; srand((unsigned) time(&t));
 }
 
 void removeRandom(int r, int c) {
-	int idx = 10 * r + c;
+	int idx = length * r + c;
 	int i;
 	for (i = 0; i < rcount; i++) {
 		if (idx == rindeces[i])
@@ -106,14 +123,14 @@ void printRandom() {
 struct pair getRandom() {
 	struct pair rc;
 	int idx = rindeces[rand() % rcount];
-	rc.r = idx / 10;
-	rc.c = idx % 10;
+	rc.r = idx / length;
+	rc.c = idx % length;
 	return rc;
 }
 
 void printSorted() {
 	char *prfx = "";
-	for (int i = 0; i < 10; i++) {
+	for (int i = 0; i < length; i++) {
 		printf("%s%d", prfx, sorted[i]);
 		prfx = " ";
 	}
@@ -122,12 +139,17 @@ void printSorted() {
 
 void getSorted() {
 	int idx;
-	for (int i = 0; i < 10; i++) {
+	for (int i = 0; i < length; i++) {
 		idx = 0; 
-		for (int j = 0; j < 10; j++) {
-			if (record[i][j] == 9)
+		for (int j = 0; j < length; j++) {
+			if (/*record[i][j]*/ matrixGet(i, j) == 9)
 				idx++;
 		}
 		sorted[idx] = elements[i];
 	}
 }
+
+void setLength(int len) {
+	length = len;
+}
+
