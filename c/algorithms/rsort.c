@@ -42,9 +42,9 @@ void random_generator_test();
 
 
 /* Record ************************************************/
-#define EQ 7
-#define GT 9
-#define LT 1
+#define EQ '='
+#define GT 'x'
+#define LT 'o'
 #define OPP(val) (val == GT? LT : GT)
 
 struct record {
@@ -58,6 +58,7 @@ void record_free(struct record *rec);
 int record_size(struct record *rec);
 void record_mark(struct record *rec, int row, int col, int val);
 struct pair record_pair(struct record *rec);
+struct pair record_input_pair(struct record *rec);
 int record_filled(struct record *rec);
 void record_positions(struct record *rec, int *positions);
 void record_print(struct record *rec);
@@ -149,7 +150,9 @@ void square_matrix_print(struct square_matrix *mat) {
 	char *prfx = " ";
 	for (int i = 0; i < mat->size; i++) {
 		for (int j = 0; j < mat->size; j++) {
-			printf("%s%d", prfx, square_matrix_get(mat, i, j));
+			unsigned char c = square_matrix_get(mat, i, j);
+			if (0 == c) c = '.';
+			printf("%s%c", prfx, c);
 		}
 		printf("\n");
 	}
@@ -352,6 +355,8 @@ struct pair record_pair(struct record *rec) {
 	int idx = random_generator_get(rec->rg);
 	res.r = ROW(idx, record_size(rec));
 	res.c = COL(idx, record_size(rec));
+	square_matrix_print(rec->mat);
+	char c; scanf("%c", &c);
 	return res;
 }
 
@@ -435,6 +440,14 @@ void record_test() {
 	}
 	record_free(rec);
 }
+
+struct pair record_input_pair(struct record *rec) {
+	struct pair res;
+	square_matrix_print(rec->mat);
+	printf("mark: ");
+	scanf("%d %d", &res.r, &res.c);
+	return res;
+}
 /*********************************************************/
 
 
@@ -445,7 +458,8 @@ int random_sort(const int *elements, int *sorted_elements, int size) {
 	int comparisons = 0, positions[size];
 	rec = record_new(size);
 	while (!record_filled(rec)) {
-		randp = record_pair(rec);
+		//randp = record_pair(rec);
+		randp = record_input_pair(rec);
 		record_mark(rec, randp.r, randp.c,
 				(elements[randp.r] < elements[randp.c] ? LT : GT));
 		comparisons++;
