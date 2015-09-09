@@ -1,6 +1,8 @@
+main = putStrLn "Fibonacci Algs."
+
 fibh n n1 n2
 	| n == 0 = n1 + n2
-	| otherwise = fibh (n - 1) (n1 + n2) (n1)
+	| otherwise = fibh (n - 1) (n1 + n2) n1
 
 fib 0 = 0
 fib 1 = 1
