@@ -1,37 +1,27 @@
--- module Bulk (separateShapes) where
+module Bulk where
+import Data.List (nub)
 
 type Point = (Int, Int, Int)
 type Face = [Point]
 
-separateShapes :: [Face] -> [[Face]]
-separateShapes = foldr (collapse . (: [])) []
-  where
-    collapse :: [Face] -> [[Face]] -> [[Face]]
-    collapse f [] = [f]
-    collapse f (s:ss)
-      | null m = s : collapse f ss
-      | otherwise = collapse m ss
-      where m = merge f s
-    merge f s
-      | mergeable (concat f) (concat s) = f ++ s
-      | otherwise = []
-      where
-        mergeable :: [Point] -> [Point] -> Bool
-        mergeable (a:as) b
-          | a `elem` b = True
-          | otherwise = mergeable as b
-        mergeable _ _ = False
+sharePoint :: [Point] -> [Point] -> Bool
+sharePoint (a:as) bs
+  | a `elem` bs = True
+  | otherwise = sharePoint as bs
+sharePoint _ _ = False
+
+sharePlane :: [Point] -> [Point] -> Bool
+sharePlane as bs = plane as == plane bs
+  where mark a b
+          | a == b = a
+          | otherwise = -1
+        plane = foldl1 (\(x, y, z) (xa, ya, za) ->
+                  (mark x xa, mark y ya, mark z za))
 
 separate :: [Face] -> [[Face]]
 separate fs = conglomerate mergeable merge $ map (:[]) fs
-  where
-    merge = (++)
-    mergeable a b =
-      let mergeableP (ap:aps) bps
-            | ap `elem` bps = True
-            | otherwise = mergeableP aps bps
-          mergeableP _ _ = False
-      in mergeableP (concat a) (concat b)
+  where merge = (++)
+        mergeable a b = sharePoint (concat a) (concat b)
 
 conglomerate :: (a -> a -> Bool) -> (a -> a -> a) -> [a] -> [a]
 conglomerate _ _ [] = []
@@ -42,14 +32,8 @@ conglomerate fc fj as = foldr collapse [] as
           | otherwise = b : collapse a bs
 
 simplifyFaces :: [Face] -> [Face]
-simplifyFaces fs = []
-
-volumeOfShape :: [Face] -> Int
-volumeOfShape [] = 0
-volumeOfShape fs
-  | 6 == len = volumeOfSimpleShape fs
-  | 6 < len = undefined
-  | otherwise = -1
-  where len = length fs
-
-volumeOfSimpleShape = undefined
+simplifyFaces = conglomerate sameFace joinFace
+  where sameFace :: [Point] -> [Point] -> Bool
+        sameFace a b = (a `sharePoint` b) && (a `sharePlane` b)
+        joinFace :: [Point] -> [Point] -> [Point]
+        joinFace psa psb = nub $ psa ++ psb

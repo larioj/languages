@@ -1,13 +1,14 @@
 import Control.Monad
-newtype Mat = Mat (Int, Char) deriving (Show, Eq)
+import Data.List
 
-nega :: Mat -> Mat
-nega (Mat (val, sym)) = Mat (-1 * val, sym)
+nega :: (Int, String) -> (Int, String)
+nega (val, sym) = (-1 * val, sym)
 
-pset :: Int -> [[Mat]]
+pset :: Int -> [[(Int, String)]]
 pset n = let
-	a = ['E'..'L']
-	b = fmap (\ca -> Mat (1, ca)) a
+	ac = ['E'..'L']
+	a = fmap (: []) ac
+	b = fmap (\ca -> (1, ca)) a
 	c = fmap nega b
 	d = b ++ c
 	f = filterM (const [True, False]) d
@@ -15,7 +16,20 @@ pset n = let
 
 p3 = pset 3
 
-mpairs :: [([Mat], [Mat])]
+mpairs :: [([(Int, String)], [(Int, String)])]
 mpairs = [(x, y) | x <- p3, y <- p3, y /= x]
 
-main = print mpairs
+msflat :: ([(Int, String)], [(Int, String)]) -> [(Int, String)]
+msflat (lhs, rhs)
+	| 1 == length rhs && 1 == length lhs = let
+		val = fst (head lhs) * fst (head rhs)
+		sym = snd (head lhs) ++ snd (head rhs)
+		in [(val, sym)]
+	| 1 == length lhs = msflat (lhs, [head rhs]) ++ msflat (lhs, tail rhs)
+	| otherwise = msflat ([head lhs], rhs) ++ msflat (tail lhs, rhs)
+
+
+mflat :: [([(Int, String)], [(Int, String)])] -> [[(Int, String)]]
+mflat = fmap msflat
+
+main = print $ mflat mpairs
