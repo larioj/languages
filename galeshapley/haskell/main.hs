@@ -1,6 +1,8 @@
 import GaleShapley
 import Person
 import System.Environment
+import Text.Read
+import Data.Maybe
 
 nGoodness n =
   do men <- randPeople n
@@ -11,6 +13,11 @@ nGoodness n =
 
 main = do
   args <- getArgs
-  let n = read $ head args
-  res <- nGoodness n
-  print res
+  let argc = length args
+  pr <- getProgName
+  let n = readMaybe $ head args
+  if 1 /= argc || isNothing n then
+    putStrLn $ "usage: " ++ pr ++ " n"
+    else do
+      res <- nGoodness $ fromJust n
+      print res
