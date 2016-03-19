@@ -3,6 +3,19 @@
 
 (require 2htdp/batch-io)
 
+;; format of test doc
+;;
+;; -- testname1
+;; test body1
+;; --
+;; result1
+;; -- testname2
+;; test body2
+;; --
+;; result2
+;;
+;; etc
+
 (define args (current-command-line-arguments))
 (define file-name (vector-ref args 0))
 (define folder-name (vector-ref args 1))
