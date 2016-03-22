@@ -11,7 +11,8 @@ object checksumAccumulator {
   def calculate(s: String): Int = {
     if (cache.contains(s)) {
       cache(s)
-    } else {
+    }
+    else {
       val acc = new checksumAccumulator
       for (c <- s) {
         acc.add(c.toByte)
